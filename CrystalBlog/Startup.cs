@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using CrystalBlog.Data;
 using CrystalBlog.Models;
 using CrystalBlog.Services;
+using CrystalBlog.Entities.Users;
 
 namespace CrystalBlog
 {
@@ -40,11 +41,21 @@ namespace CrystalBlog
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<CrystalDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<User, Role>(options =>
+                {
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireNonAlphanumeric = false;
+
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+
+                    options.Cookies.ApplicationCookie.LoginPath = "/login";
+                    options.Cookies.ApplicationCookie.ExpireTimeSpan = new TimeSpan(7, 0, 0, 0); // 7 days
+                    options.Cookies.ApplicationCookie.SlidingExpiration = true;
+                })
+                .AddEntityFrameworkStores<CrystalDbContext, int>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
