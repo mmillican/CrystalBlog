@@ -13,6 +13,8 @@ using CrystalBlog.Data;
 using CrystalBlog.Models;
 using CrystalBlog.Services;
 using CrystalBlog.Entities.Users;
+using AutoMapper;
+using System.Reflection;
 
 namespace CrystalBlog
 {
@@ -59,6 +61,9 @@ namespace CrystalBlog
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            var appAssembly = typeof(Startup).GetTypeInfo().Assembly;
+            services.AddAutoMapper(appAssembly);
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
