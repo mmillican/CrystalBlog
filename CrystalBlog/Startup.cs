@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CrystalBlog.Data;
-using CrystalBlog.Models;
 using CrystalBlog.Services;
 using CrystalBlog.Entities.Users;
 using AutoMapper;
 using System.Reflection;
+using CrystalBlog.Infrastructure.SiteTenancy;
+using Microsoft.AspNetCore.Mvc.Razor;
+using CrystalBlog.Infrastructure.Views;
+using CrystalBlog.Entities.Sites;
 
 namespace CrystalBlog
 {
@@ -59,6 +58,13 @@ namespace CrystalBlog
                 })
                 .AddEntityFrameworkStores<CrystalDbContext, int>()
                 .AddDefaultTokenProviders();
+            
+            services.Configure<RazorViewEngineOptions>(opts =>
+            {
+                opts.ViewLocationExpanders.Add(new ThemeViewLocationExpander());
+            });
+
+            services.AddMultitenancy<Site, SiteResolver>();
 
             services.AddMvc();
 
@@ -90,6 +96,8 @@ namespace CrystalBlog
             app.UseStaticFiles();
 
             app.UseIdentity();
+
+            app.UseMultitenancy<Site>();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 

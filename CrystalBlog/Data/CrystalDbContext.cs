@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CrystalBlog.Entities.Users;
+using CrystalBlog.Entities.Sites;
 
 namespace CrystalBlog.Data
 {
     public class CrystalDbContext : IdentityDbContext<User, Role, int>
     {
+        public DbSet<Site> Sites { get; set; }
+
         public CrystalDbContext(DbContextOptions<CrystalDbContext> options)
             : base(options)
         {
