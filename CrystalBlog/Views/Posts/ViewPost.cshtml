@@ -1,0 +1,25 @@
+﻿@inject SignInManager<CrystalBlog.Entities.Users.User> SignInManager
+@model CrystalBlog.Models.BlogPosts.PostViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+    var isSignedIn = SignInManager.IsSignedIn(User);
+}
+
+@section hero
+{
+    <div class="text-center">
+        <h1>@Model.Title</h1>
+
+        <h3>@Model.PublishedOn.ToString("d")</h3>
+    </div>
+}
+
+@Html.Raw(System.Net.WebUtility.HtmlDecode(Model.Body))
+
+@if (isSignedIn)
+{
+    <p>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Edit</a>
+    </p>
+}

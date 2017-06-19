@@ -2,12 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using CrystalBlog.Entities.Users;
 using CrystalBlog.Entities.Sites;
+using CrystalBlog.Entities.Posts;
 
 namespace CrystalBlog.Data
 {
     public class CrystalDbContext : IdentityDbContext<User, Role, int>
     {
         public DbSet<Site> Sites { get; set; }
+
+        public DbSet<BlogPost> BlogPosts { get; set; }
 
         public CrystalDbContext(DbContextOptions<CrystalDbContext> options)
             : base(options)

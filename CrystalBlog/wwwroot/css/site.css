@@ -10,13 +10,6 @@
     padding-right: 15px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -47,4 +40,9 @@ textarea {
     .carousel-caption {
         display: none;
     }
+}
+
+.form-control.k-widget, .form-group .k-datepicker, .form-group .k-combobox, .form-group .k-dropdown, .form-group .k-numerictextbox {
+    padding: 0;
+    width: 100%;
 }

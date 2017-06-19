@@ -8,9 +8,10 @@ using CrystalBlog.Data;
 namespace CrystalBlog.Migrations
 {
     [DbContext(typeof(CrystalDbContext))]
-    partial class CrystalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170614034805_CreateBlogPostsTable")]
+    partial class CreateBlogPostsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

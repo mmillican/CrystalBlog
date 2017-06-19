@@ -1,0 +1,78 @@
+﻿@model CrystalBlog.Models.BlogPosts.EditPostViewModel
+@{ 
+    ViewData["Title"] = "Edit blog post";
+}
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="Title"></label>
+            <input type="text" asp-for="Title" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Slug">URL</label>
+            <input type="text" asp-for="Slug" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="PublishedOn">Publish date</label>
+            <input type="date" asp-for="PublishedOn" class="form-control" />
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="IsHidden" class="checkbox-inline">
+                <input type="checkbox" asp-for="IsHidden" />
+                Hidden (not in post lists)
+            </label>
+            <label asp-for="IsDisabled" class="checkbox-inline">
+                <input type="checkbox" asp-for="IsDisabled" />
+                Disabled (not accessible, <code>404</code>)
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <label asp-for="Body">
+                Post content
+            </label>
+            <textarea asp-for="Body" rows="15" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save post</button>
+</form>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#PublishedOn').kendoDatePicker();
+
+            var $txtTitle = $('#Title'),
+                $txtSlug = $('#Slug');
+
+            var oldTitle = $txtTitle.val();
+            $txtTitle.on('blur', function () {
+                if (!$(this).val() || $(this).val() == oldTitle)
+                    return;
+
+                $.ajax({
+                    url: '@Url.Action("SuggestSlug")',
+                    type: 'POST',
+                    data: { title: $txtTitle.val() },
+                    dataType: 'JSON',
+                    success: function (result) {
+                        $txtSlug.val(result.slug);
+                    },
+                    error: function () {
+                        alert('Error generating slug');
+                    }
+                });
+            });
+
+            $('#Body').kendoEditor({
+                encoded: false
+            });
+        });
+    </script>    
+}
