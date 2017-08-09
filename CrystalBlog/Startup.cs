@@ -14,6 +14,8 @@ using CrystalBlog.Infrastructure.SiteTenancy;
 using Microsoft.AspNetCore.Mvc.Razor;
 using CrystalBlog.Infrastructure.Views;
 using CrystalBlog.Entities.Sites;
+using CrystalBlog.Configuration;
+using CrystalBlog.Services.Storage;
 
 namespace CrystalBlog
 {
@@ -63,6 +65,16 @@ namespace CrystalBlog
             {
                 opts.ViewLocationExpanders.Add(new ThemeViewLocationExpander());
             });
+
+            services.Configure<StorageConfig>(Configuration.GetSection("Storage"));
+            switch (Configuration["Storage:Type"]?.ToLower())
+            {
+                case "azure":
+                    services.AddTransient<IFileStorageService, AzureFileStorageService>();
+                    break;
+                default:
+                    break;
+            }
 
             services.AddMultitenancy<Site, SiteResolver>();
 
